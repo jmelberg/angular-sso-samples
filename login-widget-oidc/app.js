@@ -38,7 +38,6 @@ app.config(function ($routeProvider) {
  */
 app.value("oktaSignIn", undefined);
 app.value("oktaAuth", undefined);
-app.value("widget", undefined);
 app.run(function(widgetClient){
 	oktaSignIn = widgetClient.create({
 		baseUrl: "https://example.oktapreview.com",
@@ -55,7 +54,6 @@ app.run(function(widgetClient){
 	  	}
   	});
   	oktaAuth = widgetClient;
-  	widget = true;
 });
 
 /**
@@ -65,35 +63,31 @@ app.run(function(widgetClient){
  */
 app.controller("LoginController", 
 	function($scope, $location, $window, $timeout) {
-		/**
-		 *	Refreshes the page to reload the Sign-In Widget
-		 *	
-		 *	Workaround for known widget issue
-		 */
-		if(widget == false){
-			widget = true;
-			$timeout(function(){
-				$window.location.reload();
-			}, 500);
-		}
 
 		/* Check for existing session */
-		oktaAuth.checkSession()
-		.then(function(res){
-			if("auth" in res){
-				$window.localStorage["auth"] = angular.toJson(res.auth);
-	        	$window.localStorage["session"] = res.session;
-	        	widget = false;
-	        	$timeout(function(){
-	            	$location.path("/login-widget-oidc/#");
-	        	}, 100);
-			} else {
-				console.log("Session already in progress. Please signout.");
-	            $location.path("/login-widget-oidc/#");
+		oktaAuth.existingSession()
+		.then(function(exists){
+			// Session exists
+			$location.path("/login-widget-oidc/#");
+		}, function(show){
+			// Try catch for known widget issue -> reloads page (e.g. 'Backbone' error)
+			try {
+				oktaAuth.launchWidget()
+				.then(function(res){
+					if("auth" in res){
+						$window.localStorage["auth"] = angular.toJson(res.auth);
+			        	$window.localStorage["session"] = res.session;
+			        	$timeout(function(){
+			            	$location.path("/login-widget-oidc/#");
+			        	}, 100);
+					}
+				}, function(err){ console.error(err);}
+				);
+			} catch (e){
+				$window.location.reload();
 			}
-		}, function(err){
-			console.error(err);
 		});
+		
 });
 
 /**
@@ -110,7 +104,7 @@ app.controller("HomeController", function($scope, $window, $location,
 	var session = $window.localStorage["session"];
 	var auth = $window.localStorage["auth"];
 	var sessionObject = $window.localStorage["sessionObject"];
-	
+	displayWidget = false;
 	/* Update page scope */
 	$scope.session = session;
 	$scope.auth = !angular.isUndefined(auth) ? JSON.parse(auth) : undefined;

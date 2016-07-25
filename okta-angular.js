@@ -111,7 +111,7 @@ angular
 				});
 			}
 		})
-		.fail(function(err){deferred.revoke(err);});
+		.fail(function(err){deferred.reject(err);});
 		return deferred.promise;
 	}
 
@@ -124,7 +124,7 @@ angular
 		.finally(function(){
 			deferred.resolve("Closed Session");
 		})
-		.fail(function(err){deferred.revoke(err);});
+		.fail(function(err){deferred.reject(err);});
 		return deferred.promise;
 	}
 
@@ -140,7 +140,7 @@ angular
 				"claims" : res.claims
 			});
 		})
-		.fail(function(err){deferred.revoke(err);});
+		.fail(function(err){deferred.reject(err);});
 		return deferred.promise;
 	}
 
@@ -154,7 +154,7 @@ angular
 		if (!angular.isUndefined(decoded)){
 			deferred.resolve(decoded);
 		} else {
-			deferred.revoke(token);
+			deferred.reject(token);
 		}
 		return deferred.promise;
 	}
@@ -172,7 +172,7 @@ angular
 			deferred.resolve("Signed out");
 		})
 		.fail(function(err){
-			deferred.revoke(err);
+			deferred.reject(err);
 		});
 		return deferred.promise;
 	}
@@ -220,33 +220,44 @@ angular
 	};
 
 	/**
-	 *	Checks for active session if not present, it
+	 *	Checks for existing session if not present, it
 	 *	uses the Okta Widget AuthSDK to load the
 	 *	Okta Sign-In Widget	
 	 */
-	var checkSession = function() {
+	var existingSession = function() {
 		var deferred = $q.defer();
-		auth.session.get(function(res){
-			if(res.status !== 'INACTIVE'){
-				signout();
+		auth.session.exists(function(exists){
+			if(exists) {
+				// Active session
+				deferred.resolve(true);
+			} else {
+				// No active session found
+				deferred.reject();
 			}
-			// No session, render element
-			auth.renderEl(
-	        	{ el: "#okta-login-container" },
-	        	function(res){
-	           	 	if (res.status === "SUCCESS") {
-	           	 		deferred.resolve({
-	           	 			"auth" : res,
-	           	 			"session" : true
-	           	 		});
-	            	} else {
-	            		deferred.revoke(res);
-	            	}
-	        	}
-			);
 		});
 		return deferred.promise;
-	}
+	} 
+		
+	/**
+	 *	Launches the sign in widget
+	 */
+	 var launchWidget = function() {
+	 	var deferred = $q.defer();
+	 	auth.renderEl(
+	        { el: "#okta-login-container" },
+	        function(res){
+	           	 if (res.status === "SUCCESS") {
+	           	 	deferred.resolve({
+	           	 		"auth" : res,
+	           	 		"session" : true
+	           	 	});
+	            } else {
+	            	deferred.reject(res);
+	            }
+	        }
+		);
+		return deferred.promise;
+	 }
 
 
 	/**
@@ -256,7 +267,7 @@ angular
 		var deferred = $q.defer();
 		auth.session.refresh(function(res) {
 			if(res.status === "INACTIVE"){
-				deferred.revoke(false);
+				deferred.reject(false);
 			} else {
 				deferred.resolve(res);
 			}
@@ -297,7 +308,7 @@ angular
 				auth.signOut();
 				deferred.resolve("Signed out");
 			} else {
-				deferred.revoke("Already Signed Out");
+				deferred.reject("Already Signed Out");
 			}
 		});
 		loggedIn = false;
@@ -309,7 +320,8 @@ angular
 	 */
 	return {
 		create : create, 
-		checkSession : checkSession,
+		existingSession : existingSession,
+		launchWidget : launchWidget,
 		refreshSession : refreshSession,
 		closeSession : closeSession,
 		renewIdToken : renewIdToken,
