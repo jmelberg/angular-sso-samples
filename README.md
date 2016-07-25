@@ -36,7 +36,25 @@ This sample application was tested with an Okta org. If you do not have an Okta 
 To test out the [custom claims/scopes](http://openid.net/specs/openid-connect-core-1_0.html#AdditionalClaims) ability with the returned `accessToken`, additionally configure the following:
 
 1. In the **Authorization Server** screen, click the **OAuth 2.0 Access Token** *Edit* button
-2. Add the custom claim *name* `user_email` and *value* `appuser.email`
+2. Add the custom scope `gravatar`.
+3. Add the custom claim *name* `user_email` and *value* `appuser.email`
+4. Add the **gravatar** scope to your `app.js` file:
+```javascript
+// custom-login/app.js
+$scope.getTokens = function(auth) {
+    var options = {
+      'token' : auth.transaction.sessionToken,
+      'scopes' : [
+        'openid',
+        'email',
+        'profile',
+        'groups',
+        'gravatar' // added custom scope
+      ]};
+    ...
+  }
+
+```
 
 ## Using the Sample Application
 Once the project is cloned, install [node.js](https://nodejs.org/en/download/) on your machine. Using [npm](https://nodejs.org/en/download/) install [http-server](https://www.npmjs.com/package/http-server).
