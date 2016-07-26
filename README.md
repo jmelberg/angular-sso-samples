@@ -41,18 +41,10 @@ To test out the [custom claims/scopes](http://openid.net/specs/openid-connect-co
 4. Add the **gravatar** scope to your `app.js` file:
 ```javascript
 // custom-login/app.js
-$scope.getTokens = function(auth) {
-    var options = {
-      'token' : auth.transaction.sessionToken,
-      'scopes' : [
-        'openid',
-        'email',
-        'profile',
-        'groups',
-        'gravatar' // added custom scope
-      ]};
-    ...
-  }
+app.run(function(authClient){
+  ...
+  clientScopes = ['openid', 'email', 'profile', 'groups', 'gravatar'];
+});
 
 ```
 

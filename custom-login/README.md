@@ -2,7 +2,7 @@
 Single-Page Web Application (SPA) sample using a custom login interface
 
 ### Configure the Sample Application
-Update the **baseUrl**, **id**, and **redirect** in your `custom-login/app.js` file:
+Update the **baseUrl**, **id**, **redirect**, and **scopes** in your `custom-login/app.js` file:
 ```javascript
 app.run(function(authClient){
 	oktaClient = authClient.create({
@@ -11,6 +11,7 @@ app.run(function(authClient){
 		redirect: "http://localhost:8080/"
 	});
 	oktaAuth = authClient;
+	clientScopes = ['openid', 'email', 'profile', 'groups', 'gravatar'];
 });
 ```
 
@@ -27,7 +28,11 @@ Using the [Okta AuthSDK](http://developer.okta.com/docs/guides/okta_auth_sdk), a
 
 ```javascript
 $scope.getTokens = function(auth) {
-	oktaAuth.getTokens(auth.transaction.sessionToken)
+	var options = {
+		'token' : auth.transaction.sessionToken,
+		'scopes' : clientScopes
+	};
+	oktaAuth.getTokens(options)
 	.then(function(res){
 		// do something
 	}, function(err){
@@ -68,7 +73,7 @@ If the current session is valid, returns a new ID Token
 
 ```javascript
 $scope.renewIdToken = function() {
-    oktaAuth.renewIdToken()
+    oktaAuth.renewIdToken(clientScopes)
 	.then(function(res){
 		// do something
 	}, function(err){
@@ -97,7 +102,7 @@ Returns JSON object with [Gavatar](https://en.gravatar.com/site/implement/) URL 
 ```json
 // Example response
 {
-	"image" : "https://www.gravatar.com/avatar/<image_hash>",
+	"image" : "www.gravatar.com/avatar/<image_hash>",
 	"name" 	: "example@okta.com"
 }
 ```

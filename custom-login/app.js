@@ -35,6 +35,7 @@ app.config(function ($routeProvider) {
  */
 app.value("oktaClient", undefined);
 app.value("oktaAuth", undefined);
+app.value("clientScopes", undefined);
 
 app.run(function(authClient){
 	oktaClient = authClient.create({
@@ -43,6 +44,7 @@ app.run(function(authClient){
 		redirect: "http://localhost:8080/"
 	});
 	oktaAuth = authClient;
+	clientScopes = ['openid', 'email', 'profile', 'groups', 'gravatar'];
 });
 
 /**
@@ -87,13 +89,8 @@ app.controller("HomeController",
 		$scope.getTokens = function(auth) {
 			var options = {
 				'token' : auth.transaction.sessionToken,
-				'scopes' : [
-					'openid',
-					'email',
-					'profile',
-					'groups',
-					'gravatar'
-				]};
+				'scopes' : clientScopes
+			};
 			oktaAuth.getTokens(options)
 			.then(function(res){
 				$window.localStorage["userInfo"] = angular.toJson(res);
@@ -166,7 +163,7 @@ app.controller("HomeController",
 		 */
 		$scope.renewIdToken = function() {
 			// The access token cannot be refreshed - cached access token saved
-			oktaAuth.renewIdToken()
+			oktaAuth.renewIdToken(clientScopes)
 			.then(function(res){
 				$window.localStorage["userInfo"] = angular.toJson({
 					"idToken" : res.idToken,

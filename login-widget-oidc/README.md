@@ -20,7 +20,6 @@ app.run(function(widgetClient){
       }
     });
     oktaAuth = widgetClient;
-    widget = true;
 });
 ```
 

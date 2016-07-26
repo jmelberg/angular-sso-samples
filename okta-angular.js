@@ -77,7 +77,7 @@ angular
 	};
 
 	/**
-	 *	Given a sessionToken, retuns "idToken", "accessToken",
+	 *	Given a sessionToken, returns "idToken", "accessToken",
 	 *	and user "clams"
 	 */
 	var getTokens = function(options) {
@@ -131,9 +131,10 @@ angular
 	/**
 	 *	Renews the current ID token
 	 */
-	var renewIdToken = function() {
+	var renewIdToken = function(options) {
+		var scopes = {'scope' : options};
 		var deferred = $q.defer();
-		auth.idToken.refresh()
+		auth.idToken.refresh(scopes)
 		.then(function(res) {
 			deferred.resolve({
 				"idToken" : res.idToken,
@@ -203,7 +204,6 @@ angular
  */	
 .factory("widgetClient", function($q) {
 	var auth;
-	var loggedIn = false;
 
 	/**
 	 *	Creates the Okta Authentication binding
@@ -283,7 +283,6 @@ angular
 		auth.session.close(function(){
 			deferred.resolve("Closed Session");
 		});
-		loggedIn = false;
 		return deferred.promise;
 	}
 	
@@ -311,7 +310,6 @@ angular
 				deferred.reject("Already Signed Out");
 			}
 		});
-		loggedIn = false;
 		return deferred.promise;
 	}
 

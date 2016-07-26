@@ -63,7 +63,6 @@ app.run(function(widgetClient){
  */
 app.controller("LoginController", 
 	function($scope, $location, $window, $timeout) {
-
 		/* Check for existing session */
 		oktaAuth.existingSession()
 		.then(function(exists){
