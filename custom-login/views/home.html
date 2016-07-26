@@ -29,9 +29,9 @@
 			</div>
 			<br /><br /><br />
 			<div class="btn-group-vertical" ng-if="session == 'true' && userInfo">
-		     	<button type="button" class="btn btn-lg btn-primary" ng-click="renewIdToken()">Renew ID Token</button>
-			  	<button type="button" class="btn btn-lg btn-info" ng-click="decodeIdToken(userInfo.idToken)">Decode ID Token</button>
-			  	<button type="button" class="btn btn-lg btn-danger" ng-click="apiCall(userInfo.accessToken)">Call External API</button>
+		     	<button type="button" class="btn btn-lg btn-primary" ng-if="userInfo.idToken" ng-click="renewIdToken()">Renew ID Token</button>
+			  	<button type="button" class="btn btn-lg btn-info" ng-if="userInfo.idToken" ng-click="decodeIdToken(userInfo.idToken.idToken)">Decode ID Token</button>
+			  	<button type="button" class="btn btn-lg btn-danger" ng-if="userInfo.accessToken" ng-click="apiCall(userInfo.accessToken.accessToken)">Call External API</button>
 			</div>
 			<br /><br /><br />
 			<div ng-show="img && session == 'true'" id="imgAnchor">
@@ -48,12 +48,10 @@
 			<span class="label label-warning pull-right" ng-if="session == 'false'">Closed Session</span>
 		</h3>
 	  	<pre><code>{{auth | json}}</code></pre>
-	  	<h3 ng-if="userInfo" id="userInfoAnchor">ID Token<br />
-	  		<pre><code>{{userInfo.idToken}}</code></pre></h3>
+	  	<h3 ng-if="userInfo.idToken" id="userInfoAnchor">ID Token<br />
+	  		<pre><code>{{userInfo.idToken | json}}</code></pre></h3>
 	  	<h3 ng-if="userInfo.accessToken">Access Token
-	  		<pre><code>{{userInfo.accessToken}}</code></pre></h3>
-	  	<h3 ng-if="userInfo.claims">Claims
-	  		<pre><code>{{userInfo.claims | json}}</code></pre></h3>
+	  		<pre><code>{{userInfo.accessToken | json}}</code></pre></h3>
 	  	<h3 ng-if="sessionObject" id="sessionAnchor">Session Info
 	  	<pre><code>{{sessionObject | json}}</code></pre></h3>
 	  	<h3 ng-if="decodedIdToken" id='decodeAnchor'>Decoded ID Token

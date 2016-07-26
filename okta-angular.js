@@ -77,7 +77,7 @@ angular
 	};
 
 	/**
-	 *	Given a sessionToken, returns "idToken", "accessToken",
+	 *	Given a sessionToken, returns "idToken" and/or "accessToken",
 	 *	and user "clams"
 	 */
 	var getTokens = function(options) {
@@ -85,13 +85,24 @@ angular
 		if(auth.session.exists()){
 			auth.idToken.authorize({
 				sessionToken: options.token,
+				responseType : options.responseType,
 				scope : options.scopes
 			}).then(function(res) {
-				deferred.resolve({
-					"idToken" : res.idToken,
-					"accessToken" : res.accessToken,
-					"claims" : res.claims
-				});
+				var tokens = {};
+				if(angular.isArray(res)){
+					angular.forEach(res, function(val) {
+						if("accessToken" in val){
+							tokens["accessToken"] = val;
+						}
+						if ("idToken" in val){
+							tokens["idToken"] = val;
+						}
+					});
+				} else {
+					if (res.hasOwnProperty("accessToken")){ tokens["accessToken"] = res; }
+					if (res.hasOwnProperty("idToken")){ tokens["idToken"] = res; }
+				}
+				deferred.resolve(tokens);
 			});
 		}
 		return deferred.promise;
@@ -137,8 +148,7 @@ angular
 		auth.idToken.refresh(scopes)
 		.then(function(res) {
 			deferred.resolve({
-				"idToken" : res.idToken,
-				"claims" : res.claims
+				"idToken" : res
 			});
 		})
 		.fail(function(err){deferred.reject(err);});

@@ -24,12 +24,13 @@ The **API_URL** connects the sample application to `server.js` to verify the acc
 **IMPORTANT:** The server looks for the claim value `user_email`, configured in a previous step.
 
 ###Get Tokens
-Using the [Okta AuthSDK](http://developer.okta.com/docs/guides/okta_auth_sdk), a user is authenticated and returned an `idToken` and `accessToken`.
+Using the [Okta AuthSDK](http://developer.okta.com/docs/guides/okta_auth_sdk), a user is authenticated and returned an `idToken` and `accessToken`. To return only the `idToken` or `accessToken`, specify it as a String.
 
 ```javascript
 $scope.getTokens = function(auth) {
 	var options = {
 		'token' : auth.transaction.sessionToken,
+		'responseType' : ['id_token', 'token'], // Returns accessToken and idToken
 		'scopes' : clientScopes
 	};
 	oktaAuth.getTokens(options)

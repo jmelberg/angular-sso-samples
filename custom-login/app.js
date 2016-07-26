@@ -57,7 +57,7 @@ var API_URL = "http://localhost:9000/protected"
  *
  *	@var $scope.session 			: 	Live/Closed session (Bool)
  *	@var $scope.auth 				: 	User response (JSON)
- *	@var $scope.userInfo  			: 	Id Token, Access Token and Claims (JSON)	 
+ *	@var $scope.userInfo  			: 	Id Token and/or Access Token (JSON)	 
  *	@var $scope.decodedIdToken 		: 	Decoded header, claims, and signiture of ID token (JSON)
  *	@var $scope.sessionObject 		: 	Session object (JSON)
  *	@var $scope.img 				: 	Gavatar image URL
@@ -84,11 +84,12 @@ app.controller("HomeController",
 		$scope.imgName = !angular.isUndefined(imageName) ? imageName : undefined;
 		
 		/**
-		 *	Gets the Id, Access Token, and claims
+		 *	Gets the Id and Access Token
 		 */
 		$scope.getTokens = function(auth) {
 			var options = {
 				'token' : auth.transaction.sessionToken,
+				'responseType' : ['token', 'id_token'], // Requires list for multiple inputs
 				'scopes' : clientScopes
 			};
 			oktaAuth.getTokens(options)
@@ -167,7 +168,6 @@ app.controller("HomeController",
 			.then(function(res){
 				$window.localStorage["userInfo"] = angular.toJson({
 					"idToken" : res.idToken,
-					"claims" : res.claims,
 					"accessToken" : JSON.parse($window.localStorage["userInfo"]).accessToken
 				});
 				refresh(100);
