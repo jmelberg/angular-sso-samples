@@ -38,12 +38,18 @@ To test out the [custom claims/scopes](http://openid.net/specs/openid-connect-co
 1. In the **Authorization Server** screen, click the **OAuth 2.0 Access Token** *Edit* button
 2. Add the custom scope `gravatar`.
 3. Add the custom claim *name* `user_email` and *value* `appuser.email`
-4. Add the **gravatar** scope to your `app.js` file:
+4. Add the **gravatar** scope to your `custom-login/app.js` file:
 ```javascript
 // custom-login/app.js
 app.run(function(authClient){
   ...
-  clientScopes = ['openid', 'email', 'profile', 'groups', 'gravatar'];
+  clientScopes = [
+    'openid',
+    'email',
+    'profile',
+    'groups',
+    'gravatar'
+  ];
 });
 
 ```

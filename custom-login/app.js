@@ -1,3 +1,4 @@
+/* 	Author: Jordan Melberg */
 /** Copyright © 2016, Okta, Inc.
  * 
  * Licensed under the Apache License, Version 2.0 (the "License");
@@ -44,7 +45,12 @@ app.run(function(authClient){
 		redirect: "http://localhost:8080/"
 	});
 	oktaAuth = authClient;
-	clientScopes = ['openid', 'email', 'profile', 'groups', 'gravatar'];
+	clientScopes = [
+		'openid',
+		'email',
+		'profile',
+		'groups'
+		];
 });
 
 /**
@@ -60,12 +66,12 @@ var API_URL = "http://localhost:9000/protected"
  *	@var $scope.userInfo  			: 	Id Token and/or Access Token (JSON)	 
  *	@var $scope.decodedIdToken 		: 	Decoded header, claims, and signiture of ID token (JSON)
  *	@var $scope.sessionObject 		: 	Session object (JSON)
- *	@var $scope.img 				: 	Gavatar image URL
- *	@var $scope.imageName 			: 	Name of Gavatar user 
+ *	@var $scope.img 				: 	Gravatar image URL
+ *	@var $scope.imageName 			: 	Name of Gravatar user 
  *
  */
 app.controller("HomeController",
-	function($scope, $window, $location, $timeout,$route, $anchorScroll, $http, authClient) {
+	function($scope, $window, $location, $timeout, $route, $anchorScroll, $http, authClient) {
 		var auth = $window.localStorage["auth"];
 		var userInfo = $window.localStorage["userInfo"];
 		var session = $window.localStorage["session"];
@@ -89,7 +95,7 @@ app.controller("HomeController",
 		$scope.getTokens = function(auth) {
 			var options = {
 				'token' : auth.transaction.sessionToken,
-				'responseType' : ['token', 'id_token'], // Requires list for multiple inputs
+				'responseType' : ['id_token', 'token'], // Requires list for multiple inputs
 				'scopes' : clientScopes
 			};
 			oktaAuth.getTokens(options)

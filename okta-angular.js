@@ -1,3 +1,4 @@
+/* 	Author: Jordan Melberg */
 /** Copyright © 2016, Okta, Inc.
  * 
  * Licensed under the Apache License, Version 2.0 (the "License");
@@ -23,7 +24,7 @@
  *		etc. if using a custom login form
  *
  *		Inject "widgetClient" in your controllers, directives,
- *		etc if using the sign in widget
+ *		etc if using the sign-in widget
  */
 
 angular

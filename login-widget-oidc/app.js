@@ -1,3 +1,4 @@
+/* 	Author: Jordan Melberg */
 /** Copyright © 2016, Okta, Inc.
  * 
  * Licensed under the Apache License, Version 2.0 (the "License");
@@ -41,7 +42,6 @@ app.value("oktaAuth", undefined);
 app.run(function(widgetClient){
 	oktaSignIn = widgetClient.create({
 		baseUrl: "https://example.oktapreview.com",
-	    // OAuth Options
 	    clientId: "CLIENT_ID",
 	  	redirectUri: "http://localhost:8080/",
 	  	scheme: "OAUTH2",
@@ -49,7 +49,11 @@ app.run(function(widgetClient){
 	    	responseType: "id_token",
 	    	responseMode: "okta_post_message",
 	    	scope : [
-	      		"openid", "email", "profile", "address", "phone"
+	      		"openid",
+	      		"email",
+	      		"profile",
+	      		"address",
+	      		"phone"
 	    	]
 	  	}
   	});
