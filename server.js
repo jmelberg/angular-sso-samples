@@ -27,7 +27,7 @@ var gravatar = require('gravatar');
 
 var OktaConfig = {
   orgUrl: 'https://example.oktapreview.com',
-  clientId: 'CLIENT_ID',
+  clientId: '79arVRKBcBEYMuMOXrYF',
   };
 
 /**
@@ -116,7 +116,7 @@ app.get('/protected',
 
     if(scopes.indexOf('gravatar') > -1){
       // Send gavatar image
-      res.send({'image' : gravatar.url(req.user.user_email, {s: '200', r: 'x', d: 'retro'}), 'name' : req.user.user_email});
+      res.send({'image' : "https:" + gravatar.url(req.user.user_email, {s: '200', r: 'pg', d: 'retro'}), 'name' : req.user.user_email});
 
     } else{ res.send({'Error' : 'Scope "gravatar" not defined'}); }
 });

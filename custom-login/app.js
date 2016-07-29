@@ -41,7 +41,7 @@ app.value("clientScopes", undefined);
 app.run(function(authClient){
 	oktaClient = authClient.create({
 		baseUrl: "https://example.oktapreview.com",
-		id: "CLIENT_ID",
+		id: "79arVRKBcBEYMuMOXrYF",
 		redirect: "http://localhost:8080/"
 	});
 	oktaAuth = authClient;

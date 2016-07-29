@@ -42,7 +42,7 @@ app.value("oktaAuth", undefined);
 app.run(function(widgetClient){
 	oktaSignIn = widgetClient.create({
 		baseUrl: "https://example.oktapreview.com",
-	    clientId: "CLIENT_ID",
+	    clientId: "79arVRKBcBEYMuMOXrYF",
 	  	redirectUri: "http://localhost:8080/",
 	  	scheme: "OAUTH2",
 	  	authParams: {
