@@ -41,10 +41,12 @@ app.value("clientScopes", undefined);
 app.run(function(authClient){
 	oktaClient = authClient.create({
 		baseUrl: "https://example.oktapreview.com",
-		id: "79arVRKBcBEYMuMOXrYF",
+		id: "ViczvMucBWT14qg3lAM1",
 		redirect: "http://localhost:8080/"
 	});
 	oktaAuth = authClient;
+	console.log("Auth: ", oktaClient)
+	console.log("OktaAuth:" , oktaAuth)
 	clientScopes = [
 		'openid',
 		'email',

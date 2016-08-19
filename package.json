@@ -12,12 +12,9 @@
     "Server" : "Karl McGuinness"
   },
   "dependencies" : {
-    "body-parser": "^1.15.0",
-    "express": "^4.13.4",
-    "morgan": "^1.7.0",
-    "passport": "^0.3.2",
-    "passport-okta-oidc-bearer": "https://github.com/mcguinness/passport-okta-oidc-bearer.git",
-    "yargs": "^4.4.0",
+    "passport-restify": "^1.0.1",
+    "restify": "^4.1.1",
+    "passport-oauth2-jwt-bearer": "https://github.com/mcguinness/passport-okta-oidc-bearer.git",    "yargs": "^4.4.0",
     "gravatar" : "^1.5.2"
   }
 }
