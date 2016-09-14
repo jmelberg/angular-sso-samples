@@ -1,6 +1,9 @@
 #Okta AngularJS Examples
 The following examples will provide you with custom AngularJS wrappers around the [Okta AuthSDK](http://developer.okta.com/docs/guides/okta_auth_sdk).
 
+##Update (9/13/2016)
+The most up-to-date samples are now living on the repository [Okta-Widget-Angular](https://github.com/jmelberg/okta-widget-angular)
+
 ##Sample Scenarios
 Currently, these samples use the module `OktaAuthClient` defined in the file `okta-angular.js`. The `OktaAuthClient` is an AngularJS wrapper for the AuthSDK implementation. To use the provided `authClient` and `widgetClient` wrappers, inject them into your module.
 
